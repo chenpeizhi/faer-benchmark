@@ -1,0 +1,76 @@
+{
+  "pin": {
+    "FAER_FORK_REV": "71b25ffb7ae3ce038ec25b35c91e526be41b9a63",
+    "FAER_FORK_DIRTY": "false",
+    "FAER_FORK_DIR": "/home/shinaoka/.local/state/faer-measurement-checkouts/71b25ffb7ae3ce038ec25b35c91e526be41b9a63/t4a-faer",
+    "FAER_FORK_VERSION": "0.27.1",
+    "FAER_FORK_FEATURES": "std,rayon",
+    "FAER_UPSTREAM_REV": "0539947ffb757a739d7e703a7d2fa0c792a909c1",
+    "FAER_UPSTREAM_DIRTY": "false",
+    "FAER_UPSTREAM_DIR": "/home/shinaoka/projects/tensor4all/faer-benchmark/extern/upstream-faer",
+    "FAER_UPSTREAM_VERSION": "0.24.4",
+    "FAER_UPSTREAM_FEATURES": "std,rayon",
+    "FAER_UPSTREAM_REF": "faer-v0.24.4",
+    "BIN_DIR": "/home/shinaoka/projects/tensor4all/faer-benchmark/target/faer-rev/71b25ffb7ae3-openblas/release",
+    "BUILD_FEATURES": "fbench/link-openblas,fbench/fork-par-shape,fbench/fork-team",
+    "BUILD_ENV": "OPENBLAS_DYNAMIC_ARCH=1 FC=/opt/intel/oneapi/compiler/2026.2/bin/ifx LD_LIBRARY_PATH=/opt/intel/oneapi/compiler/2026.2/lib:/opt/intel/oneapi/2026.2/lib rpath=/opt/intel/oneapi/compiler/2026.2/lib:/opt/intel/oneapi/2026.2/lib",
+    "BUILD_VENDOR": "openblas",
+    "BUILD_FORK_API": "parshape",
+    "BUILD_TEAM_API": "threadteam",
+    "BUILD_LOCK_SHA256": "425af6b0617d2039a92c45e3979ec1b21abb98519cbec78976ed938d6e3e82f9"
+  },
+  "admission": {
+    "harness": {
+      "commit": "eeeaa36388c515a992d5056f4211e4a6cb92ba54",
+      "dirty": false,
+      "outputs_dirty": true,
+      "excluded_outputs": [
+        "data/results",
+        "result"
+      ],
+      "excluded_sibling_outputs": []
+    },
+    "toolkit": {
+      "commit": "74e50e8199cb2c2f07e810744a0943fc3a8c1170",
+      "dirty": false,
+      "measured_path": "/home/shinaoka/projects/tensor4all/campaign-toolkit"
+    },
+    "argv": [
+      "scripts/record_run.py",
+      "zen5-cpu",
+      "faer-kernels-large",
+      "--checkout",
+      "/home/shinaoka/.local/state/faer-measurement-checkouts/71b25ffb7ae3ce038ec25b35c91e526be41b9a63/t4a-faer",
+      "--upstream",
+      "extern/upstream-faer",
+      "--vendor",
+      "openblas",
+      "--engines",
+      "faer-fork,lapack-openblas",
+      "--threads",
+      "4,8",
+      "--regimes",
+      "linalg-large,gemm-large,linalg-boundary",
+      "--shapes",
+      "1024,1024x1024x1024,255,257,511,513",
+      "--dtypes",
+      "f64,c64",
+      "--reps",
+      "5",
+      "--aa",
+      "6",
+      "--prime-ms",
+      "250",
+      "--label",
+      "pub-71b25ffb-20261031-large1024-openblas",
+      "--no-publish"
+    ]
+  },
+  "binary": {
+    "path": "/home/shinaoka/projects/tensor4all/faer-benchmark/target/faer-rev/71b25ffb7ae3-openblas/release/fbench",
+    "sha256": "031d85f03c297a1d21ddd298f0192a7bbb88b1d0c4e807fe553207f01c8362a9"
+  },
+  "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)\nbinary: rustc\ncommit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4\ncommit-date: 2026-09-28\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.0\nLLVM version: 23.1.1\n",
+  "cargo": "cargo 1.99.0 (5f94df478 2026-08-27)\nrelease: 1.99.0\ncommit-hash: 5f94df4789f005f9a352888e8355ffc645b7ed0e\ncommit-date: 2026-08-27\nhost: x86_64-unknown-linux-gnu\nlibgit2: 1.9.6 (sys:0.21.0 vendored)\nlibcurl: 8.21.0-DEV (sys:0.4.90+curl-8.21.0 vendored ssl:OpenSSL/3.6.3)\nssl: OpenSSL 3.6.3 9 Jun 2026\nos: Ubuntu 24.4.0 (noble) [64-bit]\n",
+  "env": {}
+}

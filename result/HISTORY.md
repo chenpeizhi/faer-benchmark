@@ -6,9 +6,9 @@ this file is what the generator produces.
 Every page not selected for the index's Cells table, newest first and grouped by the
 revisions it measured. The current pages are in [INDEX.md](INDEX.md).
 
-- Reference fork revision (`pins/t4a-faer.rev`): `3a8edf02b82eb6c69362799591e0a970c4ceb8d3`
+- Reference fork revision (`pins/t4a-faer.rev`): `71b25ffb7ae3ce038ec25b35c91e526be41b9a63`
 - Reference upstream revision (`pins/upstream-faer.rev`): `faer-v0.24.4`
-- Newest recorded run: `2026-10-27T04:37:44.357994Z`
+- Newest recorded run: `2026-11-01T08:40:30.078104Z`
 - Every page below is one `(suite, hardware profile, fork revision, upstream revision,
   vendor arm)` and carries its commits, its hardware and the vendor library it linked.
 

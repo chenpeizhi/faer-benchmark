@@ -1,0 +1,22 @@
+pinned.sh: cpus=4-11 idle_window=3s max_busy=0.05 retries=3
+pinned.sh: cpus 4-11 busy after run (attempt 1); rejecting it
+pinned.sh: rejected attempt 1 archived at /home/shinaoka/projects/tensor4all/faer-benchmark/data/results/zen5-cpu/faer-kernels/20261101T031016Z-pub-71b25ffb-20261031-openblas/run3-linalg-mid-8t.csv.rejected.EsUq7P
+pinned.sh: cpus 4-11 busy before run (attempt 2); waiting
+cpu4 busy=0.070
+cpu5 busy=0.063
+cpu6 busy=0.040
+cpu7 busy=0.027
+cpu8 busy=0.003
+cpu9 busy=0.020
+cpu10 busy=0.070
+cpu11 busy=0.047
+cpu16 busy=0.090 (cache peer)
+cpu17 busy=0.000 (cache peer)
+cpu18 busy=0.047 (cache peer)
+cpu19 busy=0.060 (cache peer)
+cpu20 busy=0.063 (cache peer)
+cpu21 busy=0.037 (cache peer)
+cpu22 busy=0.030 (cache peer)
+cpu23 busy=0.120 (cache peer)
+idle_cpus: busy CPUs [4, 5, 10, 16, 19, 20, 23]
+pinned.sh: cpus 4-11 idle before and after (attempt 3)
