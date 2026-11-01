@@ -46,7 +46,7 @@ for f in $(printf '%s\n' "$changed" | grep -E '^pins/.*\.rev$' || true); do
         found=0
         for repo in "$root" "$root/../faer" "$root/../campaign-toolkit" "$root"/extern/*/; do
             [ -d "$repo/.git" ] || continue
-            if git -C "$repo" cat-file -e "$sha^{commit}" 2>/dev/null; then found=1; break; fi
+            if (unset $(git rev-parse --local-env-vars); git -C "$repo" cat-file -e "$sha^{commit}") 2>/dev/null; then found=1; break; fi
         done
         if [ "$found" -eq 0 ]; then
             echo "pre-commit: $f names $sha, which no local checkout can resolve" >&2

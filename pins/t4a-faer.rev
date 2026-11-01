@@ -60,4 +60,7 @@
 # timing loop owns (`fork-team`, #35; docs/timing-policy.md "Thread budget"); 0.27 moved threadteam
 # to 0.2. Not measured at this pin when it moved: the index shows its cells as `missing` until a
 # publication run records them.
-71b25ffb7ae3ce038ec25b35c91e526be41b9a63
+# 0.28.0 published source (faer#182). The predecessor recording remains identified
+# as 71b25ffb in its raw manifests and reports; threadteam 0.2.0 was measured,
+# whereas this release ships 0.3.0. See the report's caveat and known limitation.
+325e482b6532624d06236ad6991a41c57b0c23d1
