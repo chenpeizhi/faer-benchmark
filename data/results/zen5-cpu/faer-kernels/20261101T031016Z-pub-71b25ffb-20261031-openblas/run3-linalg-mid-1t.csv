@@ -1,0 +1,325 @@
+regime,family,dtype,order,m,n,k,batch,row,threads,total_ms,per_item_us,status,note,samples_ms,rayon_threads,vendor_threads
+linalg-mid,lu,f64,c,128,128,,1,lapack-openblas,1,0.204659,204.659000,ok,,"[0.215279, 0.210821, 0.204048, 0.204089, 0.20465899999999998]",1,1
+linalg-mid,lu,f64,c,128,128,,1,faer-fork,1,0.169755,169.755000,ok,,"[0.16975500000000002, 0.169514, 0.16988499999999998, 0.174834, 0.16923400000000002]",1,1
+linalg-mid,lu,f64,f,128,128,,1,lapack-openblas,1,0.150388,150.388000,ok,,"[0.15450699999999998, 0.150388, 0.150388, 0.15023799999999998, 0.150319]",1,1
+linalg-mid,lu,f64,f,128,128,,1,faer-fork,1,0.148345,148.345000,ok,,"[0.14921600000000002, 0.148345, 0.148024, 0.15128, 0.145359]",1,1
+linalg-mid,lu,f64,c,256,256,,1,lapack-openblas,1,1.354199,1354.199000,ok,,"[1.337398, 1.3505019999999999, 1.354199, 1.358026, 1.359589]",1,1
+linalg-mid,lu,f64,c,256,256,,1,faer-fork,1,0.993070,993.070000,ok,,"[0.991998, 0.989984, 0.99307, 1.001806, 0.9959450000000001]",1,1
+linalg-mid,lu,f64,f,256,256,,1,lapack-openblas,1,0.836870,836.870000,ok,,"[0.834987, 0.840367, 0.835128, 0.8394550000000001, 0.83687]",1,1
+linalg-mid,lu,f64,f,256,256,,1,faer-fork,1,0.897523,897.523000,ok,,"[0.898254, 0.902772, 0.8937459999999999, 0.897523, 0.892143]",1,1
+linalg-mid,lu,f64,c,512,512,,1,lapack-openblas,1,8.280652,8280.652000,ok,,"[8.243162, 8.280652, 8.248061, 8.292423, 8.280982]",1,1
+linalg-mid,lu,f64,c,512,512,,1,faer-fork,1,6.727554,6727.554000,ok,,"[6.7275540000000005, 6.717295, 6.712766, 6.735177999999999, 6.733234]",1,1
+linalg-mid,lu,f64,f,512,512,,1,lapack-openblas,1,5.118653,5118.653000,ok,,"[5.110218, 5.131697, 5.118201999999999, 5.118653, 5.121178]",1,1
+linalg-mid,lu,f64,f,512,512,,1,faer-fork,1,6.111112,6111.112000,ok,,"[6.097747, 6.111112, 6.091786, 6.1344140000000005, 6.139704999999999]",1,1
+linalg-mid,full_piv_lu,f64,c,128,128,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,f64,c,128,128,,1,faer-fork,1,0.315825,315.825000,ok,,"[0.31489300000000003, 0.318901, 0.314623, 0.31582499999999997, 0.319091]",1,1
+linalg-mid,full_piv_lu,f64,f,128,128,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,f64,f,128,128,,1,faer-fork,1,0.289927,289.927000,ok,,"[0.289927, 0.29450499999999996, 0.292452, 0.289316, 0.288644]",1,1
+linalg-mid,full_piv_lu,f64,c,256,256,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,f64,c,256,256,,1,faer-fork,1,2.702898,2702.898000,ok,,"[2.718436, 2.702557, 2.700583, 2.712786, 2.702898]",1,1
+linalg-mid,full_piv_lu,f64,f,256,256,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,f64,f,256,256,,1,faer-fork,1,2.619863,2619.863000,ok,,"[2.6171480000000003, 2.61789, 2.625845, 2.619863, 2.620294]",1,1
+linalg-mid,full_piv_lu,f64,c,512,512,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,f64,c,512,512,,1,faer-fork,1,21.846484,21846.484000,ok,,"[21.737151, 21.846484, 21.763921, 21.912345, 21.850461000000003]",1,1
+linalg-mid,full_piv_lu,f64,f,512,512,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,f64,f,512,512,,1,faer-fork,1,21.245901,21245.901000,ok,,"[21.245901, 21.172895, 21.261169, 21.188274, 21.291365]",1,1
+linalg-mid,cholesky,f64,c,128,128,,1,lapack-openblas,1,0.157471,157.471000,ok,,"[0.158333, 0.157471, 0.161068, 0.154136, 0.157422]",1,1
+linalg-mid,cholesky,f64,c,128,128,,1,faer-fork,1,0.066764,66.764000,ok,,"[0.066824, 0.066764, 0.066714, 0.065992, 0.066843]",1,1
+linalg-mid,cholesky,f64,f,128,128,,1,lapack-openblas,1,0.073205,73.205000,ok,,"[0.072795, 0.073205, 0.073396, 0.072895, 0.07721299999999999]",1,1
+linalg-mid,cholesky,f64,f,128,128,,1,faer-fork,1,0.059681,59.681000,ok,,"[0.059750000000000004, 0.05963, 0.059681, 0.05956, 0.059719999999999995]",1,1
+linalg-mid,cholesky,f64,c,256,256,,1,lapack-openblas,1,0.987850,987.850000,ok,,"[0.9905750000000001, 0.98785, 0.9862169999999999, 0.9882610000000001, 0.984614]",1,1
+linalg-mid,cholesky,f64,c,256,256,,1,faer-fork,1,0.378892,378.892000,ok,,"[0.37943299999999996, 0.375075, 0.380986, 0.37889199999999995, 0.37817100000000003]",1,1
+linalg-mid,cholesky,f64,f,256,256,,1,lapack-openblas,1,0.409138,409.138000,ok,,"[0.41214399999999995, 0.408217, 0.411222, 0.409138, 0.407605]",1,1
+linalg-mid,cholesky,f64,f,256,256,,1,faer-fork,1,0.315875,315.875000,ok,,"[0.315454, 0.31696799999999997, 0.319602, 0.315875, 0.31571499999999997]",1,1
+linalg-mid,cholesky,f64,c,512,512,,1,lapack-openblas,1,5.869554,5869.554000,ok,,"[5.855859, 5.861489, 5.869554, 5.871738, 5.886726]",1,1
+linalg-mid,cholesky,f64,c,512,512,,1,faer-fork,1,2.503608,2503.608000,ok,,"[2.5033279999999998, 2.508638, 2.503608, 2.50503, 2.502866]",1,1
+linalg-mid,cholesky,f64,f,512,512,,1,lapack-openblas,1,2.697607,2697.607000,ok,,"[2.697607, 2.696255, 2.694051, 2.701274, 2.7025159999999997]",1,1
+linalg-mid,cholesky,f64,f,512,512,,1,faer-fork,1,2.051019,2051.019000,ok,,"[2.054766, 2.054065, 2.0510189999999997, 2.0461810000000002, 2.050278]",1,1
+linalg-mid,triangular_solve,f64,c,128,128,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,f64,c,128,128,,1,faer-fork,1,0.004238,4.238000,ok,,"[0.004228, 0.004298000000000001, 0.004238, 0.004368, 0.004188000000000001]",1,1
+linalg-mid,triangular_solve,f64,f,128,128,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,f64,f,128,128,,1,faer-fork,1,0.004659,4.659000,ok,,"[0.0046489999999999995, 0.004648, 0.004668, 0.004659, 0.0046890000000000005]",1,1
+linalg-mid,triangular_solve,f64,c,256,256,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,f64,c,256,256,,1,faer-fork,1,0.012743,12.743000,ok,,"[0.012572999999999999, 0.012792999999999999, 0.012742999999999999, 0.012503, 0.012763]",1,1
+linalg-mid,triangular_solve,f64,f,256,256,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,f64,f,256,256,,1,faer-fork,1,0.014517,14.517000,ok,,"[0.014517, 0.014517, 0.014647, 0.014507, 0.014477]",1,1
+linalg-mid,triangular_solve,f64,c,512,512,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,f64,c,512,512,,1,faer-fork,1,0.043471,43.471000,ok,,"[0.04332, 0.043470999999999996, 0.043831, 0.04335000000000001, 0.043581]",1,1
+linalg-mid,triangular_solve,f64,f,512,512,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,f64,f,512,512,,1,faer-fork,1,0.047238,47.238000,ok,,"[0.047007, 0.046726, 0.05439, 0.048068999999999994, 0.047237999999999995]",1,1
+linalg-mid,solve,f64,c,128,128,,1,lapack-openblas,1,0.203587,203.587000,ok,,"[0.21011000000000002, 0.200702, 0.21065, 0.203487, 0.203587]",1,1
+linalg-mid,solve,f64,c,128,128,,1,faer-fork,1,0.138005,138.005000,ok,,"[0.14121199999999998, 0.137535, 0.137906, 0.138005, 0.138276]",1,1
+linalg-mid,solve,f64,f,128,128,,1,lapack-openblas,1,0.147283,147.283000,ok,,"[0.147143, 0.15065900000000002, 0.147363, 0.147283, 0.147133]",1,1
+linalg-mid,solve,f64,f,128,128,,1,faer-fork,1,0.110956,110.956000,ok,,"[0.110956, 0.110915, 0.114432, 0.110915, 0.11129700000000001]",1,1
+linalg-mid,solve,f64,c,256,256,,1,lapack-openblas,1,1.152545,1152.545000,ok,,"[1.148207, 1.152385, 1.156402, 1.16028, 1.1525450000000002]",1,1
+linalg-mid,solve,f64,c,256,256,,1,faer-fork,1,0.768794,768.794000,ok,,"[0.765178, 0.7687940000000001, 0.772361, 0.7688550000000001, 0.7677419999999999]",1,1
+linalg-mid,solve,f64,f,256,256,,1,lapack-openblas,1,0.821452,821.452000,ok,,"[0.821822, 0.821752, 0.821452, 0.815451, 0.82073]",1,1
+linalg-mid,solve,f64,f,256,256,,1,faer-fork,1,0.664251,664.251000,ok,,"[0.664251, 0.655654, 0.665883, 0.664761, 0.657869]",1,1
+linalg-mid,solve,f64,c,512,512,,1,lapack-openblas,1,7.169201,7169.201000,ok,,"[7.1741, 7.191502, 7.1679379999999995, 7.167858, 7.169201]",1,1
+linalg-mid,solve,f64,c,512,512,,1,faer-fork,1,6.642385,6642.385000,ok,,"[6.653766, 6.659396, 6.642385, 6.614573, 6.596661]",1,1
+linalg-mid,solve,f64,f,512,512,,1,lapack-openblas,1,5.068008,5068.008000,ok,,"[5.074811, 5.076314, 5.068008, 5.062528, 5.0648029999999995]",1,1
+linalg-mid,solve,f64,f,512,512,,1,faer-fork,1,6.039728,6039.728000,ok,,"[6.041811999999999, 6.039728, 6.0309420000000005, 6.045598999999999, 6.036232]",1,1
+linalg-mid,qr_factor,f64,c,128,128,,1,lapack-openblas,1,0.436338,436.338000,ok,,"[0.440155, 0.43696, 0.436338, 0.43375400000000003, 0.423214]",1,1
+linalg-mid,qr_factor,f64,c,128,128,,1,faer-fork,1,0.308030,308.030000,ok,,"[0.30765000000000003, 0.30802999999999997, 0.311326, 0.308732, 0.30663799999999997]",1,1
+linalg-mid,qr_factor,f64,f,128,128,,1,lapack-openblas,1,0.372780,372.780000,ok,,"[0.371558, 0.378151, 0.37278, 0.371238, 0.374814]",1,1
+linalg-mid,qr_factor,f64,f,128,128,,1,faer-fork,1,0.244012,244.012000,ok,,"[0.243501, 0.243121, 0.247979, 0.24440300000000004, 0.244012]",1,1
+linalg-mid,qr_factor,f64,c,256,256,,1,lapack-openblas,1,2.188393,2188.393000,ok,,"[2.182423, 2.189085, 2.173948, 2.188393, 2.199605]",1,1
+linalg-mid,qr_factor,f64,c,256,256,,1,faer-fork,1,1.518513,1518.513000,ok,,"[1.52201, 1.5173210000000001, 1.522731, 1.517361, 1.518513]",1,1
+linalg-mid,qr_factor,f64,f,256,256,,1,lapack-openblas,1,1.864534,1864.534000,ok,,"[1.864534, 1.8602759999999998, 1.866528, 1.86253, 1.8676190000000001]",1,1
+linalg-mid,qr_factor,f64,f,256,256,,1,faer-fork,1,1.265464,1265.464000,ok,,"[1.2728780000000002, 1.265464, 1.265174, 1.267919, 1.2651839999999999]",1,1
+linalg-mid,qr_factor,f64,c,512,512,,1,lapack-openblas,1,14.482748,14482.748000,ok,,"[14.482748, 14.487076, 14.459494999999999, 14.486786, 14.459305]",1,1
+linalg-mid,qr_factor,f64,c,512,512,,1,faer-fork,1,8.586857,8586.857000,ok,,"[8.575896, 8.59449, 8.606072, 8.586857, 8.571087]",1,1
+linalg-mid,qr_factor,f64,f,512,512,,1,lapack-openblas,1,12.383419,12383.419000,ok,,"[12.401672000000001, 12.391755000000002, 12.383419, 12.376096, 12.348464]",1,1
+linalg-mid,qr_factor,f64,f,512,512,,1,faer-fork,1,7.678934,7678.934000,ok,,"[7.682331, 7.727474, 7.678293, 7.674887, 7.678934]",1,1
+linalg-mid,qr,f64,c,128,128,,1,lapack-openblas,1,0.854954,854.954000,ok,,"[0.854954, 0.8574080000000001, 0.8578089999999999, 0.850656, 0.843963]",1,1
+linalg-mid,qr,f64,c,128,128,,1,faer-fork,1,0.485159,485.159000,ok,,"[0.485159, 0.488525, 0.484738, 0.487774, 0.484828]",1,1
+linalg-mid,qr,f64,f,128,128,,1,lapack-openblas,1,0.750660,750.660000,ok,,"[0.758154, 0.75066, 0.7487769999999999, 0.758545, 0.747375]",1,1
+linalg-mid,qr,f64,f,128,128,,1,faer-fork,1,0.457958,457.958000,ok,,"[0.45795800000000003, 0.453651, 0.45914000000000005, 0.454171, 0.459672]",1,1
+linalg-mid,qr,f64,c,256,256,,1,lapack-openblas,1,4.322386,4322.386000,ok,,"[4.349527, 4.321365, 4.320563, 4.328267, 4.322386]",1,1
+linalg-mid,qr,f64,c,256,256,,1,faer-fork,1,2.786752,2786.752000,ok,,"[2.786752, 2.7906, 2.788475, 2.784538, 2.782775]",1,1
+linalg-mid,qr,f64,f,256,256,,1,lapack-openblas,1,4.100395,4100.395000,ok,,"[4.109443, 4.104553, 4.100395, 4.082873, 4.074828]",1,1
+linalg-mid,qr,f64,f,256,256,,1,faer-fork,1,2.666570,2666.570000,ok,,"[2.660258, 2.66657, 2.6740530000000002, 2.668593, 2.664876]",1,1
+linalg-mid,qr,f64,c,512,512,,1,lapack-openblas,1,30.536193,30536.193000,ok,,"[30.535442, 30.595013, 30.522117, 30.603478, 30.536193]",1,1
+linalg-mid,qr,f64,c,512,512,,1,faer-fork,1,19.795147,19795.147000,ok,,"[19.795147, 19.739143000000002, 19.783314999999998, 19.808392, 19.947858999999998]",1,1
+linalg-mid,qr,f64,f,512,512,,1,lapack-openblas,1,26.760378,26760.378000,ok,,"[26.778872, 26.754066, 26.814708, 26.753786, 26.760378000000003]",1,1
+linalg-mid,qr,f64,f,512,512,,1,faer-fork,1,19.121698,19121.698000,ok,,"[19.111109000000003, 19.14416, 19.115296999999998, 19.132709000000002, 19.121698]",1,1
+linalg-mid,svd_values,f64,c,128,128,,1,lapack-openblas,1,1.345923,1345.923000,ok,,"[1.3411440000000001, 1.345923, 1.347045, 1.3378070000000002, 1.365329]",1,1
+linalg-mid,svd_values,f64,c,128,128,,1,faer-fork,1,1.029868,1029.868000,ok,,"[1.0320719999999999, 1.029868, 1.025209, 1.028124, 1.0435729999999999]",1,1
+linalg-mid,svd_values,f64,f,128,128,,1,lapack-openblas,1,1.280622,1280.622000,ok,,"[1.281023, 1.2839990000000001, 1.280622, 1.276034, 1.277326]",1,1
+linalg-mid,svd_values,f64,f,128,128,,1,faer-fork,1,1.008027,1008.027000,ok,,"[1.008027, 1.008157, 1.007196, 1.0073860000000001, 1.0082069999999999]",1,1
+linalg-mid,svd_values,f64,c,256,256,,1,lapack-openblas,1,7.903950,7903.950000,ok,,"[8.797365, 7.90395, 7.883341000000001, 7.889482999999999, 7.938534000000001]",1,1
+linalg-mid,svd_values,f64,c,256,256,,1,faer-fork,1,6.319455,6319.455000,ok,,"[6.319455, 6.304087, 6.319806, 6.319686, 6.317061]",1,1
+linalg-mid,svd_values,f64,f,256,256,,1,lapack-openblas,1,7.627308,7627.308000,ok,,"[7.627308, 7.651803, 7.661391, 7.6252439999999995, 7.621998]",1,1
+linalg-mid,svd_values,f64,f,256,256,,1,faer-fork,1,6.193993,6193.993000,ok,,"[6.1829220000000005, 6.193993, 6.194132, 6.189644, 6.202208]",1,1
+linalg-mid,svd_values,f64,c,512,512,,1,lapack-openblas,1,56.398674,56398.674000,ok,,"[56.294941, 56.454306, 56.398674, 56.6181, 56.268903]",1,1
+linalg-mid,svd_values,f64,c,512,512,,1,faer-fork,1,41.366159,41366.159000,ok,,"[41.242911, 41.44725, 41.340662, 41.366158999999996, 41.425699]",1,1
+linalg-mid,svd_values,f64,f,512,512,,1,lapack-openblas,1,53.307527,53307.527000,ok,,"[53.281960000000005, 53.307527, 53.41149, 53.430173999999994, 53.264688]",1,1
+linalg-mid,svd_values,f64,f,512,512,,1,faer-fork,1,40.062844,40062.844000,ok,,"[40.010949, 40.062844, 40.034842, 40.079465, 40.16846]",1,1
+linalg-mid,svd_thin,f64,c,128,128,,1,lapack-openblas,1,3.137120,3137.120000,ok,,"[3.138112, 3.1371200000000004, 3.118126, 3.132021, 3.156376]",1,1
+linalg-mid,svd_thin,f64,c,128,128,,1,faer-fork,1,3.358571,3358.571000,ok,,"[3.358631, 3.354583, 3.358571, 3.359192, 3.353301]",1,1
+linalg-mid,svd_thin,f64,f,128,128,,1,lapack-openblas,1,3.006488,3006.488000,ok,,"[2.985059, 3.006488, 3.011729, 3.022318, 2.996621]",1,1
+linalg-mid,svd_thin,f64,f,128,128,,1,faer-fork,1,3.346288,3346.288000,ok,,"[3.3470790000000004, 3.343112, 3.339094, 3.3462880000000004, 3.35261]",1,1
+linalg-mid,svd_thin,f64,c,256,256,,1,lapack-openblas,1,17.477782,17477.782000,ok,,"[17.475798, 17.477782, 17.488031, 17.474946000000003, 17.528486]",1,1
+linalg-mid,svd_thin,f64,c,256,256,,1,faer-fork,1,16.733794,16733.794000,ok,,"[16.73713, 16.731369, 16.764812, 16.717724, 16.733794]",1,1
+linalg-mid,svd_thin,f64,f,256,256,,1,lapack-openblas,1,16.887759,16887.759000,ok,,"[16.895143, 16.895393000000002, 16.887759, 16.884923, 16.885535]",1,1
+linalg-mid,svd_thin,f64,f,256,256,,1,faer-fork,1,16.669004,16669.004000,ok,,"[16.652804, 16.673782000000003, 16.687067, 16.663193, 16.669004]",1,1
+linalg-mid,svd_thin,f64,c,512,512,,1,lapack-openblas,1,122.068009,122068.009000,ok,,"[122.068009, 122.42597099999999, 121.293985, 122.066535, 122.379624]",1,1
+linalg-mid,svd_thin,f64,c,512,512,,1,faer-fork,1,94.786846,94786.846000,ok,,"[94.678436, 94.830657, 94.786846, 94.785723, 94.844813]",1,1
+linalg-mid,svd_thin,f64,f,512,512,,1,lapack-openblas,1,117.384184,117384.184000,ok,,"[117.323612, 117.49665300000001, 117.502133, 117.384184, 117.35309600000001]",1,1
+linalg-mid,svd_thin,f64,f,512,512,,1,faer-fork,1,93.549107,93549.107000,ok,,"[93.785175, 93.484868, 93.549107, 93.587929, 93.406222]",1,1
+linalg-mid,eigh,f64,c,128,128,,1,lapack-openblas,1,1.868550,1868.550000,ok,,"[1.8684299999999998, 1.8609259999999999, 1.8858830000000002, 1.8685500000000002, 1.880794]",1,1
+linalg-mid,eigh,f64,c,128,128,,1,faer-fork,1,2.329835,2329.835000,ok,,"[2.3210990000000002, 2.330656, 2.333391, 2.323003, 2.329835]",1,1
+linalg-mid,eigh,f64,f,128,128,,1,lapack-openblas,1,1.797338,1797.338000,ok,,"[1.7928, 1.7973679999999999, 1.797338, 1.804031, 1.789584]",1,1
+linalg-mid,eigh,f64,f,128,128,,1,faer-fork,1,2.325638,2325.638000,ok,,"[2.325638, 2.3356459999999997, 2.340124, 2.317753, 2.321409]",1,1
+linalg-mid,eigh,f64,c,256,256,,1,lapack-openblas,1,9.124108,9124.108000,ok,,"[9.150567, 9.115743, 9.098321, 9.134216, 9.124108000000001]",1,1
+linalg-mid,eigh,f64,c,256,256,,1,faer-fork,1,10.074017,10074.017000,ok,,"[10.074017, 10.084316, 10.061713999999998, 10.061624, 10.100206]",1,1
+linalg-mid,eigh,f64,f,256,256,,1,lapack-openblas,1,8.701275,8701.275000,ok,,"[8.701274999999999, 8.689463, 8.717565, 8.699792, 8.715551]",1,1
+linalg-mid,eigh,f64,f,256,256,,1,faer-fork,1,10.016120,10016.120000,ok,,"[10.018805, 10.005831, 10.017432999999999, 10.016119999999999, 9.992676000000001]",1,1
+linalg-mid,eigh,f64,c,512,512,,1,lapack-openblas,1,52.047151,52047.151000,ok,,"[52.133700999999995, 51.967193, 52.060775, 52.047151, 51.953677]",1,1
+linalg-mid,eigh,f64,c,512,512,,1,faer-fork,1,50.197754,50197.754000,ok,,"[50.196572, 50.290055, 50.14684, 50.209245, 50.197753999999996]",1,1
+linalg-mid,eigh,f64,f,512,512,,1,lapack-openblas,1,49.416005,49416.005000,ok,,"[49.442194, 49.40177, 49.41354, 49.416005, 49.439047]",1,1
+linalg-mid,eigh,f64,f,512,512,,1,faer-fork,1,49.935897,49935.897000,ok,,"[50.077359, 50.02388, 49.896243999999996, 49.935897, 49.867211000000005]",1,1
+linalg-mid,eig,f64,c,128,128,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,f64,c,128,128,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,f64,f,128,128,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,f64,f,128,128,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,f64,c,256,256,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,f64,c,256,256,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,f64,f,256,256,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,f64,f,256,256,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,f64,c,512,512,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,f64,c,512,512,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,f64,f,512,512,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,f64,f,512,512,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,f64,c,128,128,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,f64,c,128,128,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,f64,f,128,128,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,f64,f,128,128,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,f64,c,256,256,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,f64,c,256,256,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,f64,f,256,256,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,f64,f,256,256,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,f64,c,512,512,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,f64,c,512,512,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,f64,f,512,512,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,f64,f,512,512,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,householder_apply,f64,c,128,128,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,f64,c,128,128,,1,faer-fork,1,0.259471,259.471000,ok,"block(basis=128,target=128)","[0.260433, 0.259471, 0.26363899999999996, 0.259431, 0.25905900000000004]",1,1
+linalg-mid,householder_apply,f64,c,128,128,,1,faer-fork,1,0.259901,259.901000,ok,"sequence(basis=128,target=128)","[0.260252, 0.259901, 0.262586, 0.257988, 0.258419]",1,1
+linalg-mid,householder_apply,f64,f,128,128,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,f64,f,128,128,,1,faer-fork,1,0.255523,255.523000,ok,"block(basis=128,target=128)","[0.255033, 0.255523, 0.260091, 0.255463, 0.25861900000000004]",1,1
+linalg-mid,householder_apply,f64,f,128,128,,1,faer-fork,1,0.254240,254.240000,ok,"sequence(basis=128,target=128)","[0.25897000000000003, 0.254141, 0.25426099999999996, 0.25423999999999997, 0.253901]",1,1
+linalg-mid,householder_apply,f64,c,256,256,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,f64,c,256,256,,1,faer-fork,1,1.913774,1913.774000,ok,"block(basis=256,target=256)","[1.9141650000000001, 1.910277, 1.913774, 1.9164889999999999, 1.912753]",1,1
+linalg-mid,householder_apply,f64,c,256,256,,1,faer-fork,1,1.900851,1900.851000,ok,"sequence(basis=256,target=256)","[1.900851, 1.894699, 1.909626, 1.903365, 1.897053]",1,1
+linalg-mid,householder_apply,f64,f,256,256,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,f64,f,256,256,,1,faer-fork,1,1.883558,1883.558000,ok,"block(basis=256,target=256)","[1.8877460000000001, 1.882687, 2.757527, 1.883558, 1.8741210000000001]",1,1
+linalg-mid,householder_apply,f64,f,256,256,,1,faer-fork,1,1.862519,1862.519000,ok,"sequence(basis=256,target=256)","[1.8624990000000001, 1.862519, 1.8684299999999998, 1.862659, 1.8616679999999999]",1,1
+linalg-mid,householder_apply,f64,c,512,512,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,f64,c,512,512,,1,faer-fork,1,15.943054,15943.054000,ok,"block(basis=512,target=512)","[15.964655, 15.943054000000002, 15.943285000000001, 15.916676, 15.928127]",1,1
+linalg-mid,householder_apply,f64,c,512,512,,1,faer-fork,1,15.799238,15799.238000,ok,"sequence(basis=512,target=512)","[15.799238, 15.787676000000001, 15.824233999999999, 15.843550000000002, 15.791192999999998]",1,1
+linalg-mid,householder_apply,f64,f,512,512,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,f64,f,512,512,,1,faer-fork,1,15.691739,15691.739000,ok,"block(basis=512,target=512)","[15.718849, 15.691739, 15.669608000000002, 15.703691, 15.668325000000001]",1,1
+linalg-mid,householder_apply,f64,f,512,512,,1,faer-fork,1,15.615458,15615.458000,ok,"sequence(basis=512,target=512)","[15.634281999999999, 15.601492, 15.615458, 16.591806000000002, 15.614756999999999]",1,1
+linalg-mid,lu,c64,c,128,128,,1,lapack-openblas,1,0.419818,419.818000,ok,,"[0.419818, 0.41485900000000003, 0.424797, 0.421861, 0.41658199999999995]",1,1
+linalg-mid,lu,c64,c,128,128,,1,faer-fork,1,0.322999,322.999000,ok,,"[0.32230699999999995, 0.32728599999999997, 0.322999, 0.322517, 0.329871]",1,1
+linalg-mid,lu,c64,f,128,128,,1,lapack-openblas,1,0.346181,346.181000,ok,,"[0.34526, 0.35125, 0.34571, 0.350439, 0.34618099999999996]",1,1
+linalg-mid,lu,c64,f,128,128,,1,faer-fork,1,0.297041,297.041000,ok,,"[0.298813, 0.297041, 0.301889, 0.29682899999999995, 0.29662900000000003]",1,1
+linalg-mid,lu,c64,c,256,256,,1,lapack-openblas,1,2.759280,2759.280000,ok,,"[2.752417, 2.75928, 2.759891, 2.767365, 2.754601]",1,1
+linalg-mid,lu,c64,c,256,256,,1,faer-fork,1,2.107252,2107.252000,ok,,"[2.103986, 2.107252, 2.104628, 2.108354, 2.1104689999999997]",1,1
+linalg-mid,lu,c64,f,256,256,,1,lapack-openblas,1,2.306291,2306.291000,ok,,"[2.305119, 2.304748, 2.310389, 2.306502, 2.306291]",1,1
+linalg-mid,lu,c64,f,256,256,,1,faer-fork,1,1.994714,1994.714000,ok,,"[1.9947139999999999, 1.9945240000000002, 1.999523, 1.994012, 1.9949540000000001]",1,1
+linalg-mid,lu,c64,c,512,512,,1,lapack-openblas,1,18.353567,18353.567000,ok,,"[18.353567, 18.327499, 18.388011, 18.364738, 18.309456]",1,1
+linalg-mid,lu,c64,c,512,512,,1,faer-fork,1,14.626075,14626.075000,ok,,"[14.549433, 14.555765, 14.709048000000001, 14.626075, 14.64515]",1,1
+linalg-mid,lu,c64,f,512,512,,1,lapack-openblas,1,16.288433,16288.433000,ok,,"[16.270249, 16.286808999999998, 16.293082000000002, 16.288433, 16.334659000000002]",1,1
+linalg-mid,lu,c64,f,512,512,,1,faer-fork,1,13.792622,13792.622000,ok,,"[13.792622, 13.808851, 13.814982, 13.777523, 13.764838999999998]",1,1
+linalg-mid,full_piv_lu,c64,c,128,128,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,c64,c,128,128,,1,faer-fork,1,0.776067,776.067000,ok,,"[0.779023, 0.776067, 0.78318, 0.775346, 0.7743140000000001]",1,1
+linalg-mid,full_piv_lu,c64,f,128,128,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,c64,f,128,128,,1,faer-fork,1,0.754056,754.056000,ok,,"[0.758996, 0.7540560000000001, 0.7462719999999999, 0.754237, 0.744508]",1,1
+linalg-mid,full_piv_lu,c64,c,256,256,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,c64,c,256,256,,1,faer-fork,1,5.964626,5964.626000,ok,,"[5.974834, 5.959395, 5.964626, 5.986015, 5.95661]",1,1
+linalg-mid,full_piv_lu,c64,f,256,256,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,c64,f,256,256,,1,faer-fork,1,5.838913,5838.913000,ok,,"[5.828984, 5.851336000000001, 5.850134, 5.838913000000001, 5.812774]",1,1
+linalg-mid,full_piv_lu,c64,c,512,512,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,c64,c,512,512,,1,faer-fork,1,40.178181,40178.181000,ok,,"[40.182568, 40.20455, 40.178181, 40.130001, 40.149857999999995]",1,1
+linalg-mid,full_piv_lu,c64,f,512,512,,1,lapack-openblas,1,,,skipped,full_piv_lu has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,full_piv_lu,c64,f,512,512,,1,faer-fork,1,39.456274,39456.274000,ok,,"[39.456274, 39.434925, 39.417922000000004, 39.486729999999994, 39.456935]",1,1
+linalg-mid,cholesky,c64,c,128,128,,1,lapack-openblas,1,0.320915,320.915000,ok,,"[0.325563, 0.320023, 0.320915, 0.325593, 0.318991]",1,1
+linalg-mid,cholesky,c64,c,128,128,,1,faer-fork,1,0.189992,189.992000,ok,,"[0.19031199999999998, 0.18970099999999998, 0.189992, 0.18919, 0.19474999999999998]",1,1
+linalg-mid,cholesky,c64,f,128,128,,1,lapack-openblas,1,0.183120,183.120000,ok,,"[0.18290900000000002, 0.185363, 0.18312, 0.18314899999999998, 0.182709]",1,1
+linalg-mid,cholesky,c64,f,128,128,,1,faer-fork,1,0.177148,177.148000,ok,,"[0.176988, 0.177148, 0.176877, 0.180313, 0.177328]",1,1
+linalg-mid,cholesky,c64,c,256,256,,1,lapack-openblas,1,2.097214,2097.214000,ok,,"[2.0989060000000004, 2.0961209999999997, 2.097214, 2.090972, 2.1022329999999996]",1,1
+linalg-mid,cholesky,c64,c,256,256,,1,faer-fork,1,1.246619,1246.619000,ok,,"[1.244975, 1.243633, 1.248151, 1.246748, 1.246619]",1,1
+linalg-mid,cholesky,c64,f,256,256,,1,lapack-openblas,1,1.286062,1286.062000,ok,,"[1.2845090000000001, 1.287284, 1.288646, 1.284849, 1.2860619999999998]",1,1
+linalg-mid,cholesky,c64,f,256,256,,1,faer-fork,1,1.136254,1136.254000,ok,,"[1.1362539999999999, 1.135452, 1.134791, 1.1373959999999999, 1.136444]",1,1
+linalg-mid,cholesky,c64,c,512,512,,1,lapack-openblas,1,12.561701,12561.701000,ok,,"[12.656094999999999, 12.543266000000001, 12.561701, 12.54548, 12.587859]",1,1
+linalg-mid,cholesky,c64,c,512,512,,1,faer-fork,1,7.901831,7901.831000,ok,,"[7.898956, 7.924083, 7.901831, 7.889088000000001, 7.934121]",1,1
+linalg-mid,cholesky,c64,f,512,512,,1,lapack-openblas,1,8.959751,8959.751000,ok,,"[8.951215, 8.957567, 8.990077000000001, 8.960552, 8.959751]",1,1
+linalg-mid,cholesky,c64,f,512,512,,1,faer-fork,1,7.510046,7510.046000,ok,,"[7.524503, 7.510046, 7.516208, 7.50145, 7.4941770000000005]",1,1
+linalg-mid,triangular_solve,c64,c,128,128,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,c64,c,128,128,,1,faer-fork,1,0.007825,7.825000,ok,,"[0.007935, 0.007824, 0.007825, 0.007825, 0.007794000000000001]",1,1
+linalg-mid,triangular_solve,c64,f,128,128,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,c64,f,128,128,,1,faer-fork,1,0.007835,7.835000,ok,,"[0.007835, 0.007835, 0.007875, 0.007804, 0.007815]",1,1
+linalg-mid,triangular_solve,c64,c,256,256,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,c64,c,256,256,,1,faer-fork,1,0.024225,24.225000,ok,,"[0.024125, 0.024284999999999998, 0.024345000000000002, 0.024184999999999998, 0.024225]",1,1
+linalg-mid,triangular_solve,c64,f,256,256,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,c64,f,256,256,,1,faer-fork,1,0.022311,22.311000,ok,,"[0.022311, 0.022341, 0.022470999999999998, 0.022202, 0.022221]",1,1
+linalg-mid,triangular_solve,c64,c,512,512,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,c64,c,512,512,,1,faer-fork,1,0.086961,86.961000,ok,,"[0.086961, 0.08712199999999999, 0.086821, 0.087271, 0.08638]",1,1
+linalg-mid,triangular_solve,c64,f,512,512,,1,lapack-openblas,1,,,skipped,triangular_solve has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,triangular_solve,c64,f,512,512,,1,faer-fork,1,0.083435,83.435000,ok,,"[0.08343500000000001, 0.083304, 0.083063, 0.087342, 0.083976]",1,1
+linalg-mid,solve,c64,c,128,128,,1,lapack-openblas,1,0.451185,451.185000,ok,,"[0.45182700000000003, 0.444954, 0.45278799999999997, 0.44306100000000004, 0.451185]",1,1
+linalg-mid,solve,c64,c,128,128,,1,faer-fork,1,0.320804,320.804000,ok,,"[0.31900100000000003, 0.323429, 0.320804, 0.319942, 0.326384]",1,1
+linalg-mid,solve,c64,f,128,128,,1,lapack-openblas,1,0.360367,360.367000,ok,,"[0.357943, 0.365597, 0.360367, 0.360137, 0.36383299999999996]",1,1
+linalg-mid,solve,c64,f,128,128,,1,faer-fork,1,0.293082,293.082000,ok,,"[0.292582, 0.29699000000000003, 0.293022, 0.293122, 0.293082]",1,1
+linalg-mid,solve,c64,c,256,256,,1,lapack-openblas,1,2.823097,2823.097000,ok,,"[2.822296, 2.823097, 2.8207929999999997, 2.875144, 2.858533]",1,1
+linalg-mid,solve,c64,c,256,256,,1,faer-fork,1,2.059563,2059.563000,ok,,"[2.072258, 2.059563, 2.0573089999999996, 2.059493, 2.069321]",1,1
+linalg-mid,solve,c64,f,256,256,,1,lapack-openblas,1,2.406586,2406.586000,ok,,"[2.406586, 2.412858, 2.411886, 2.406586, 2.399563]",1,1
+linalg-mid,solve,c64,f,256,256,,1,faer-fork,1,1.943589,1943.589000,ok,,"[1.937798, 1.947025, 1.946234, 1.939491, 1.943589]",1,1
+linalg-mid,solve,c64,c,512,512,,1,lapack-openblas,1,18.614758,18614.758000,ok,,"[18.671192, 18.607595, 18.642408999999997, 18.614758, 18.577659]",1,1
+linalg-mid,solve,c64,c,512,512,,1,faer-fork,1,14.586038,14586.038000,ok,,"[14.586038, 14.585017, 14.553999, 14.599633, 14.617747]",1,1
+linalg-mid,solve,c64,f,512,512,,1,lapack-openblas,1,16.460659,16460.659000,ok,,"[16.495804999999997, 16.45561, 16.460659, 16.424993, 16.480105]",1,1
+linalg-mid,solve,c64,f,512,512,,1,faer-fork,1,13.891462,13891.462000,ok,,"[13.909325, 13.830498, 13.891462, 14.864623, 13.852329]",1,1
+linalg-mid,qr_factor,c64,c,128,128,,1,lapack-openblas,1,0.810520,810.520000,ok,,"[0.8085370000000001, 0.809209, 0.813516, 0.81052, 0.8109620000000001]",1,1
+linalg-mid,qr_factor,c64,c,128,128,,1,faer-fork,1,0.776287,776.287000,ok,,"[0.777329, 0.776738, 0.776287, 0.772421, 0.7757970000000001]",1,1
+linalg-mid,qr_factor,c64,f,128,128,,1,lapack-openblas,1,0.742004,742.004000,ok,,"[0.744789, 0.742444, 0.742004, 0.738878, 0.7414729999999999]",1,1
+linalg-mid,qr_factor,c64,f,128,128,,1,faer-fork,1,0.716807,716.807000,ok,,"[0.716807, 0.714443, 0.722257, 0.716747, 0.717218]",1,1
+linalg-mid,qr_factor,c64,c,256,256,,1,lapack-openblas,1,5.650924,5650.924000,ok,,"[5.646335, 5.657795999999999, 5.6379790000000005, 5.650924, 5.659609000000001]",1,1
+linalg-mid,qr_factor,c64,c,256,256,,1,faer-fork,1,4.645812,4645.812000,ok,,"[4.645812, 4.6404819999999996, 4.651612999999999, 4.639621, 4.660489999999999]",1,1
+linalg-mid,qr_factor,c64,f,256,256,,1,lapack-openblas,1,5.186143,5186.143000,ok,,"[5.184339, 5.180122, 5.202783, 5.190761, 5.1861429999999995]",1,1
+linalg-mid,qr_factor,c64,f,256,256,,1,faer-fork,1,4.336780,4336.780000,ok,,"[4.3011029999999995, 4.338733, 4.350295, 4.33678, 4.326641]",1,1
+linalg-mid,qr_factor,c64,c,512,512,,1,lapack-openblas,1,37.187917,37187.917000,ok,,"[37.192484, 37.187917, 37.232649, 37.158381999999996, 37.165264]",1,1
+linalg-mid,qr_factor,c64,c,512,512,,1,faer-fork,1,29.985700,29985.700000,ok,,"[29.938753, 30.016727, 29.957788, 29.9857, 30.015114999999998]",1,1
+linalg-mid,qr_factor,c64,f,512,512,,1,lapack-openblas,1,35.288648,35288.648000,ok,,"[35.439397, 35.280192, 35.288648, 35.275493, 35.320246]",1,1
+linalg-mid,qr_factor,c64,f,512,512,,1,faer-fork,1,28.229848,28229.848000,ok,,"[28.255755, 28.281844, 28.222865, 28.228305, 28.229847999999997]",1,1
+linalg-mid,qr,c64,c,128,128,,1,lapack-openblas,1,1.610803,1610.803000,ok,,"[1.601866, 1.605713, 1.617715, 1.610803, 1.612536]",1,1
+linalg-mid,qr,c64,c,128,128,,1,faer-fork,1,1.536755,1536.755000,ok,,"[1.540161, 1.5367549999999999, 1.5394, 1.534611, 1.5342]",1,1
+linalg-mid,qr,c64,f,128,128,,1,lapack-openblas,1,1.541214,1541.214000,ok,,"[1.5479960000000001, 1.534761, 1.5412139999999999, 1.548467, 1.537707]",1,1
+linalg-mid,qr,c64,f,128,128,,1,faer-fork,1,1.511348,1511.348000,ok,,"[1.504916, 1.508773, 1.5113480000000001, 1.511609, 1.535022]",1,1
+linalg-mid,qr,c64,c,256,256,,1,lapack-openblas,1,11.314739,11314.739000,ok,,"[11.314739000000001, 11.294492, 11.311993, 11.323155, 11.340186000000001]",1,1
+linalg-mid,qr,c64,c,256,256,,1,faer-fork,1,10.070645,10070.645000,ok,,"[10.073741, 10.070644999999999, 10.074202000000001, 10.055237, 10.028426999999999]",1,1
+linalg-mid,qr,c64,f,256,256,,1,lapack-openblas,1,10.716050,10716.050000,ok,,"[10.703216, 10.734765, 10.729986, 10.713966000000001, 10.71605]",1,1
+linalg-mid,qr,c64,f,256,256,,1,faer-fork,1,9.963507,9963.507000,ok,,"[9.962845999999999, 9.956233, 9.963828, 9.965872000000001, 9.963507]",1,1
+linalg-mid,qr,c64,c,512,512,,1,lapack-openblas,1,75.195600,75195.600000,ok,,"[75.36193800000001, 75.1956, 75.016007, 74.98866699999999, 75.40572900000001]",1,1
+linalg-mid,qr,c64,c,512,512,,1,faer-fork,1,69.041023,69041.023000,ok,,"[69.04102300000001, 69.227469, 69.015495, 69.07051799999999, 68.982996]",1,1
+linalg-mid,qr,c64,f,512,512,,1,lapack-openblas,1,72.655211,72655.211000,ok,,"[72.630927, 72.714572, 72.670681, 72.628292, 72.655211]",1,1
+linalg-mid,qr,c64,f,512,512,,1,faer-fork,1,68.197688,68197.688000,ok,,"[68.153798, 68.20266799999999, 68.248012, 68.180947, 68.197688]",1,1
+linalg-mid,svd_values,c64,c,128,128,,1,lapack-openblas,1,2.300940,2300.940000,ok,,"[2.30094, 2.3009, 2.303635, 2.297333, 2.3063900000000004]",1,1
+linalg-mid,svd_values,c64,c,128,128,,1,faer-fork,1,1.762453,1762.453000,ok,,"[1.7631240000000001, 1.761411, 1.756452, 1.763074, 1.762453]",1,1
+linalg-mid,svd_values,c64,f,128,128,,1,lapack-openblas,1,2.222384,2222.384000,ok,,"[2.2224649999999997, 2.219629, 2.224297, 2.222384, 2.2048419999999997]",1,1
+linalg-mid,svd_values,c64,f,128,128,,1,faer-fork,1,1.736245,1736.245000,ok,,"[1.736245, 1.730353, 1.743879, 1.737206, 1.7354429999999998]",1,1
+linalg-mid,svd_values,c64,c,256,256,,1,lapack-openblas,1,16.244203,16244.203000,ok,,"[16.247669, 16.246156000000003, 16.221891, 16.244203, 16.229275]",1,1
+linalg-mid,svd_values,c64,c,256,256,,1,faer-fork,1,12.703288,12703.288000,ok,,"[12.847445, 12.697587, 12.703288, 12.730659, 12.691566]",1,1
+linalg-mid,svd_values,c64,f,256,256,,1,lapack-openblas,1,15.669679,15669.679000,ok,,"[15.669678999999999, 15.67, 15.640375000000002, 15.656875000000001, 15.682042000000001]",1,1
+linalg-mid,svd_values,c64,f,256,256,,1,faer-fork,1,12.462161,12462.161000,ok,,"[12.481386, 12.468072, 12.4509, 12.451882, 12.462161]",1,1
+linalg-mid,svd_values,c64,c,512,512,,1,lapack-openblas,1,99.665901,99665.901000,ok,,"[99.853418, 99.48999599999999, 99.509021, 99.665901, 100.273285]",1,1
+linalg-mid,svd_values,c64,c,512,512,,1,faer-fork,1,88.686684,88686.684000,ok,,"[88.686684, 90.74988400000001, 89.5112, 88.42501, 88.577381]",1,1
+linalg-mid,svd_values,c64,f,512,512,,1,lapack-openblas,1,97.534764,97534.764000,ok,,"[98.401558, 97.534764, 97.245869, 97.525606, 97.800786]",1,1
+linalg-mid,svd_values,c64,f,512,512,,1,faer-fork,1,88.784625,88784.625000,ok,,"[88.784625, 89.12115800000001, 88.912952, 87.62098999999999, 87.293362]",1,1
+linalg-mid,svd_thin,c64,c,128,128,,1,lapack-openblas,1,5.670768,5670.768000,ok,,"[5.670768, 5.65533, 5.675377, 5.6498800000000005, 5.6784419999999995]",1,1
+linalg-mid,svd_thin,c64,c,128,128,,1,faer-fork,1,5.290754,5290.754000,ok,,"[5.290754, 5.284934, 5.288361, 5.292136999999999, 5.299951]",1,1
+linalg-mid,svd_thin,c64,f,128,128,,1,lapack-openblas,1,5.496295,5496.295000,ok,,"[5.509659, 5.491506, 5.495313, 5.496295, 5.505453]",1,1
+linalg-mid,svd_thin,c64,f,128,128,,1,faer-fork,1,5.259807,5259.807000,ok,,"[5.251691999999999, 5.254728, 5.280947, 5.259807, 5.262252]",1,1
+linalg-mid,svd_thin,c64,c,256,256,,1,lapack-openblas,1,37.147629,37147.629000,ok,,"[37.095392, 37.222297000000005, 37.018009, 37.147629, 37.182845]",1,1
+linalg-mid,svd_thin,c64,c,256,256,,1,faer-fork,1,31.907328,31907.328000,ok,,"[32.742714, 31.860642000000002, 31.996302999999997, 31.818974, 31.907328]",1,1
+linalg-mid,svd_thin,c64,f,256,256,,1,lapack-openblas,1,35.716058,35716.058000,ok,,"[35.886112, 35.706931, 35.713533999999996, 35.716058000000004, 35.71729]",1,1
+linalg-mid,svd_thin,c64,f,256,256,,1,faer-fork,1,31.556488,31556.488000,ok,,"[31.54106, 31.601862, 31.520661999999998, 31.617610999999997, 31.556488]",1,1
+linalg-mid,svd_thin,c64,c,512,512,,1,lapack-openblas,1,234.358321,234358.321000,ok,,"[234.719524, 234.223075, 234.358914, 234.284645, 234.35832100000002]",1,1
+linalg-mid,svd_thin,c64,c,512,512,,1,faer-fork,1,204.288489,204288.489000,ok,,"[204.33568799999998, 203.019893, 203.988335, 204.288489, 204.706693]",1,1
+linalg-mid,svd_thin,c64,f,512,512,,1,lapack-openblas,1,231.420193,231420.193000,ok,,"[231.676088, 231.42019299999998, 231.401807, 231.93435300000002, 230.916859]",1,1
+linalg-mid,svd_thin,c64,f,512,512,,1,faer-fork,1,202.553712,202553.712000,ok,,"[203.02213799999998, 201.744202, 202.68319100000002, 202.553712, 202.347016]",1,1
+linalg-mid,eigh,c64,c,128,128,,1,lapack-openblas,1,3.359508,3359.508000,ok,,"[3.353928, 3.348859, 3.362654, 3.3595080000000004, 3.369276]",1,1
+linalg-mid,eigh,c64,c,128,128,,1,faer-fork,1,3.317501,3317.501000,ok,,"[3.317351, 3.326337, 3.317501, 3.312983, 3.3271379999999997]",1,1
+linalg-mid,eigh,c64,f,128,128,,1,lapack-openblas,1,3.233465,3233.465000,ok,,"[3.238144, 3.2333760000000002, 3.232654, 3.235899, 3.2334650000000003]",1,1
+linalg-mid,eigh,c64,f,128,128,,1,faer-fork,1,3.306670,3306.670000,ok,,"[3.308564, 3.30667, 3.30655, 3.30612, 3.309596]",1,1
+linalg-mid,eigh,c64,c,256,256,,1,lapack-openblas,1,20.273457,20273.457000,ok,,"[20.267285, 20.273457, 20.28636, 20.280399000000003, 20.242528]",1,1
+linalg-mid,eigh,c64,c,256,256,,1,faer-fork,1,17.681970,17681.970000,ok,,"[17.681970000000003, 17.7042, 17.697247, 17.667461999999997, 17.667222]",1,1
+linalg-mid,eigh,c64,f,256,256,,1,lapack-openblas,1,19.533877,19533.877000,ok,,"[19.52505, 19.530289999999997, 19.547813, 19.625846999999997, 19.533877]",1,1
+linalg-mid,eigh,c64,f,256,256,,1,faer-fork,1,17.608212,17608.212000,ok,,"[17.638517999999998, 17.62301, 17.556126, 17.608212, 17.529657]",1,1
+linalg-mid,eigh,c64,c,512,512,,1,lapack-openblas,1,140.311854,140311.854000,ok,,"[140.028329, 140.243348, 140.368719, 140.337081, 140.311854]",1,1
+linalg-mid,eigh,c64,c,512,512,,1,faer-fork,1,106.593329,106593.329000,ok,,"[106.70109799999999, 106.698524, 106.546392, 106.471113, 106.593329]",1,1
+linalg-mid,eigh,c64,f,512,512,,1,lapack-openblas,1,137.646402,137646.402000,ok,,"[137.646402, 137.211557, 138.456842, 137.66140900000002, 137.34755900000002]",1,1
+linalg-mid,eigh,c64,f,512,512,,1,faer-fork,1,106.050790,106050.790000,ok,,"[106.20303100000001, 106.15378, 105.98349499999999, 105.902465, 106.05079]",1,1
+linalg-mid,eig,c64,c,128,128,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,c64,c,128,128,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,c64,f,128,128,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,c64,f,128,128,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,c64,c,256,256,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,c64,c,256,256,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,c64,f,256,256,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,c64,f,256,256,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,c64,c,512,512,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,c64,c,512,512,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,eig,c64,f,512,512,,1,lapack-openblas,1,,,skipped,eig has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,eig,c64,f,512,512,,1,faer-fork,1,,,skipped,eig is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,c64,c,128,128,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,c64,c,128,128,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,c64,f,128,128,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,c64,f,128,128,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,c64,c,256,256,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,c64,c,256,256,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,c64,f,256,256,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,c64,f,256,256,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,c64,c,512,512,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,c64,c,512,512,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,upgrade_factor,c64,f,512,512,,1,lapack-openblas,1,,,skipped,upgrade_factor has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,upgrade_factor,c64,f,512,512,,1,faer-fork,1,,,skipped,upgrade_factor is not implemented for the faer arms in this harness,,1,1
+linalg-mid,householder_apply,c64,c,128,128,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,c64,c,128,128,,1,faer-fork,1,1.050614,1050.614000,ok,"block(basis=128,target=128)","[1.071623, 1.051777, 1.049643, 1.049242, 1.0506140000000002]",1,1
+linalg-mid,householder_apply,c64,c,128,128,,1,faer-fork,1,1.048561,1048.561000,ok,"sequence(basis=128,target=128)","[1.047139, 1.0485609999999999, 1.048821, 1.047849, 1.0490320000000002]",1,1
+linalg-mid,householder_apply,c64,f,128,128,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,c64,f,128,128,,1,faer-fork,1,1.030999,1030.999000,ok,"block(basis=128,target=128)","[1.030999, 1.0296260000000002, 1.030858, 1.03189, 1.03214]",1,1
+linalg-mid,householder_apply,c64,f,128,128,,1,faer-fork,1,1.040306,1040.306000,ok,"sequence(basis=128,target=128)","[1.041257, 1.041798, 1.038001, 1.040306, 1.036679]",1,1
+linalg-mid,householder_apply,c64,c,256,256,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,c64,c,256,256,,1,faer-fork,1,7.461901,7461.901000,ok,"block(basis=256,target=256)","[7.456982, 7.503888, 7.46126, 7.491135000000001, 7.461901]",1,1
+linalg-mid,householder_apply,c64,c,256,256,,1,faer-fork,1,7.506554,7506.554000,ok,"sequence(basis=256,target=256)","[7.585289, 7.502396, 7.499731, 7.528645, 7.506554]",1,1
+linalg-mid,householder_apply,c64,f,256,256,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,c64,f,256,256,,1,faer-fork,1,7.368908,7368.908000,ok,"block(basis=256,target=256)","[7.365952999999999, 7.368908, 7.367957, 7.378767, 7.371003]",1,1
+linalg-mid,householder_apply,c64,f,256,256,,1,faer-fork,1,7.450710,7450.710000,ok,"sequence(basis=256,target=256)","[7.412158000000001, 7.456311, 7.453966, 7.45071, 7.412499]",1,1
+linalg-mid,householder_apply,c64,c,512,512,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,c64,c,512,512,,1,faer-fork,1,56.709941,56709.941000,ok,"block(basis=512,target=512)","[56.592473, 56.679645, 57.03407, 56.709941, 56.976534]",1,1
+linalg-mid,householder_apply,c64,c,512,512,,1,faer-fork,1,56.697417,56697.417000,ok,"sequence(basis=512,target=512)","[56.642635, 56.645250000000004, 56.798093, 56.766164, 56.697417]",1,1
+linalg-mid,householder_apply,c64,f,512,512,,1,lapack-openblas,1,,,skipped,householder_apply has no LAPACK route in this harness; the vendor row is skipped,,1,1
+linalg-mid,householder_apply,c64,f,512,512,,1,faer-fork,1,56.723575,56723.575000,ok,"block(basis=512,target=512)","[56.703928, 57.648086, 56.989216, 56.723575, 56.598052]",1,1
+linalg-mid,householder_apply,c64,f,512,512,,1,faer-fork,1,56.392371,56392.371000,ok,"sequence(basis=512,target=512)","[56.392371, 56.447393, 56.353519, 56.386239999999994, 56.495382]",1,1

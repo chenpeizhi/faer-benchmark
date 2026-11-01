@@ -60,11 +60,31 @@ def main(argv=None):
     args = ap.parse_args(argv)
     index = ROOT / 'result' / 'index.html'
     comparison = write_comparison()
-    extra = ''
+    extra = '''<section>
+<h2>71b25ffb recording: scope and provenance</h2>
+<ul>
+<li>Recorded on evo (zen5-cpu), fork <code>71b25ffb7ae3ce038ec25b35c91e526be41b9a63</code>,
+upstream <code>0539947ffb757a739d7e703a7d2fa0c792a909c1</code>, harness <code>eeeaa36388c515a992d5056f4211e4a6cb92ba54</code>.</li>
+<li>The actual measurement toolkit was <code>74e50e8199cb2c2f07e810744a0943fc3a8c1170</code>,
+not the renderer requirements pin <code>b71624bef111ce941bddaedcce3fdb6eab40f9eb</code>.</li>
+<li>Evo was reserved for measurement, but the recorded <code>host.role=development</code> is unchanged:
+these reports retain their profile's <strong>provisional</strong> designation.</li>
+<li><strong>OpenBLAS arm: Cooperlake kernel, not Zen5-optimized.</strong>
+OpenBLAS 0.3.32 DYNAMIC_ARCH reported <code>vendor.corename=Cooperlake</code> on the
+AMD Ryzen AI 9 HX 470 (CPU family 26, model 36). Comparisons with MKL 2026.2 describe
+these builds and dispatched kernels, not a general vendor ranking on Zen5.</li>
+<li>Coverage is <strong>partial</strong> relative to the complete declarations: f64/c64,
+small suite at 1/4/8T and the 1024 + boundary tier at 4/8T. No n=1024 Seq was measured;
+Pfaffian is not a measured family, so this is not a Pfaffian performance claim.</li>
+<li>The wrong-pin partial <code>20261031T222831Z-pub-3a8edf02-20261031-mkl</code>
+is preserved locally and explicitly excluded from this publication. One rejected small-OpenBLAS
+8T attempt is retained in its raw archive, not counted as an accepted sample.</li>
+</ul>
+</section>'''
     if comparison is not None:
         cells = len(re.findall(r'<tr><td class="k">', comparison.read_text()))
         rel = comparison.relative_to(index.parent)
-        extra = ('<h2>The four-way view</h2>\n'
+        extra += ('<h2>The four-way view</h2>\n'
                  f'<p><a href="{rel}">The same recording against upstream, OpenBLAS and MKL in one '
                  f'table ({cells} cells)</a>, with the unchanged row\'s control in its header.</p>')
     site.write_site(index.parent, pins=[PIN], repo_ref=args.repo_ref, title='faer benchmark results',
