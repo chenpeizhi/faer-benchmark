@@ -38,6 +38,8 @@ jobs:
           python-version: '3.12'
       - name: Install the pinned toolkit
         run: python -m pip install --quiet -r requirements.txt
+      - name: Checkout the two reference revisions
+        run: ./scripts/setup_extern_deps.sh
       - name: Write the site
         # generated on every deploy from the committed data, result and pins; nothing is committed:
         # the landing page, the history, the HTML pages, the charts and the four-way view

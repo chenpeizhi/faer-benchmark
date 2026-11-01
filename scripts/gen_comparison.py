@@ -24,11 +24,12 @@ def load_sets(run_dir):
     run = pathlib.Path(run_dir)
     cells = {}
     for path in sorted(glob.glob(str(run / 'run*.csv'))):
-        for row in csv.DictReader(open(path)):
-            if row.get('status') != 'ok' or row.get('total_ms') in (None, ''):
-                continue
-            cells.setdefault(tuple(row[k] for k in KEY), {}).setdefault(row['row'], []).append(
-                float(row['total_ms']))
+        with open(path) as handle:
+            for row in csv.DictReader(handle):
+                if row.get('status') != 'ok' or row.get('total_ms') in (None, ''):
+                    continue
+                cells.setdefault(tuple(row[k] for k in KEY), {}).setdefault(row['row'], []).append(
+                    float(row['total_ms']))
     return cells
 
 
@@ -59,14 +60,15 @@ def control(previous_mkl, current_mkl):
 
 def load(run_dir):
     run = pathlib.Path(run_dir)
-    manifest = yaml.safe_load(open(run / 'run.yaml'))
+    manifest = yaml.safe_load((run / 'run.yaml').read_text())
     cells = {}
     for path in sorted(glob.glob(str(run / 'run*.csv'))):
-        for row in csv.DictReader(open(path)):
-            if row.get('status') != 'ok' or row.get('total_ms') in (None, ''):
-                continue
-            key = tuple(row[k] for k in KEY)
-            cells.setdefault(key, {})[row['row']] = float(row['total_ms'])
+        with open(path) as handle:
+            for row in csv.DictReader(handle):
+                if row.get('status') != 'ok' or row.get('total_ms') in (None, ''):
+                    continue
+                key = tuple(row[k] for k in KEY)
+                cells.setdefault(key, {})[row['row']] = float(row['total_ms'])
     return manifest, cells
 
 

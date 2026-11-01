@@ -32,6 +32,8 @@ jobs:
         run: ./scripts/setup_extern_deps.sh
       - name: Declarations are well formed
         run: python3 -m campaign_toolkit.declarations
+      - name: Publication site keeps the measured identity
+        run: python3 -m unittest discover -s tests -v
       - name: Every recorded run manifest validates
         run: |
           shopt -s nullglob
