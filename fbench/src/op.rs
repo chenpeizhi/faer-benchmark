@@ -248,7 +248,14 @@ mod tests {
                             batch: 2,
                         };
                         let ops = crate::ops_for(&row, dtype, family, case, order).unwrap();
-                        assert_eq!(ops.len(), if family == "householder_apply" { 2 } else { 1 });
+                        // householder_apply times both public forms; both faer rows time `lu`,
+                        // `cholesky` and `solve` through the owning method and the `in_place` route.
+                        let expected = match family {
+                            "householder_apply" => 2,
+                            "lu" | "cholesky" | "solve" if row.starts_with("faer-") => 2,
+                            _ => 1,
+                        };
+                        assert_eq!(ops.len(), expected);
                         for mut op in ops {
                             op.prepare().unwrap();
                             op.run(crate::op::Token::none()).unwrap();
