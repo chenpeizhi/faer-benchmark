@@ -258,27 +258,11 @@ cp "$PROJECT_DIR/Cargo.lock" "$lock_backup"
 restore_lock() { cp "$lock_backup" "$PROJECT_DIR/Cargo.lock"; rm -f "$lock_backup"; }
 trap restore_lock EXIT
 
-patch_meta="$(mktemp)"
-if ! cargo metadata --manifest-path "$PROJECT_DIR/Cargo.toml" --format-version 1 --offline \
-        "${PATCH_ARGS[@]}" > "$patch_meta" 2>/dev/null; then
-    echo "ERROR: cargo metadata failed; cannot verify which libraries would be linked" >&2
-    rm -f "$patch_meta"
-    exit 1
-fi
-python3 - "$patch_meta" "$FORK_DIR/faer/Cargo.toml" "$UPSTREAM_DIR/faer/Cargo.toml" <<'PYEOF' || { rm -f "$patch_meta"; exit 1; }
-import json, sys
-meta, expected_fork, expected_upstream = sys.argv[1], sys.argv[2], sys.argv[3]
-data = json.load(open(meta))
-found = {p['name']: p['manifest_path'] for p in data['packages'] if p['name'] in ('t4a-faer', 'faer')}
-for name, expected in (('t4a-faer', expected_fork), ('faer', expected_upstream)):
-    actual = found.get(name)
-    if actual != expected:
-        print(f"ERROR: this build would link {name} from {actual!r}, not from {expected!r}: a `[patch]`"
-              f" is ignored when the locked version differs from the checkout's version, so reconcile"
-              f" Cargo.lock before measuring", file=sys.stderr)
-        raise SystemExit(1)
-PYEOF
-rm -f "$patch_meta"
+bash "$(dirname "${BASH_SOURCE[0]}")/faer_patch_preflight.sh" \
+    --manifest "$PROJECT_DIR/Cargo.toml" \
+    --fork-manifest "$FORK_DIR/faer/Cargo.toml" \
+    --upstream-manifest "$UPSTREAM_DIR/faer/Cargo.toml" \
+    "${PATCH_ARGS[@]}" || exit 1
 
 bin_args=()
 for bin in "${BINS[@]}"; do bin_args+=(--bin "$bin"); done
