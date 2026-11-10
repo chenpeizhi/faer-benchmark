@@ -33,9 +33,11 @@ use blas_src as _;
 use lapack_src as _;
 
 use shared::{Case, Dtype, Order};
+use std::io::Write;
 use std::process::ExitCode;
+use std::time::{Duration, Instant};
 
-const USAGE: &str = "usage: fbench info [--threads N] | verify --threads N --n LIST [--batch LIST] [--dtype LIST] [--family LIST] [--regime R] [--rows LIST] [--csv PATH] | run --threads N --n LIST [--batch LIST] [--dtype LIST] [--family LIST] [--regime R] [--rows LIST] [--reps M] [--prime-ms MS] [--rotate-rows K] [--statistic best|median] --csv PATH";
+const USAGE: &str = "usage: fbench info [--threads N] | verify --threads N --n LIST [--batch LIST] [--dtype LIST] [--family LIST] [--regime R] [--rows LIST] [--csv PATH] | run --threads N [--cell-timeout SECS] --n LIST [--batch LIST] [--dtype LIST] [--family LIST] [--regime R] [--rows LIST] [--reps M] [--prime-ms MS] [--rotate-rows K] [--statistic best|median] --csv PATH";
 
 /// Every family name the suite declares, in the harness's priority order.
 const ALL_FAMILIES: &[&str] = &[
@@ -194,6 +196,9 @@ fn summarize(samples: &[f64], statistic: Statistic) -> Option<f64> {
 struct Args {
     command: String,
     threads: Option<usize>,
+    /// The wall-clock limit of one cell, in seconds; `0` means no limit. A cell is one `Op` and one
+    /// CSV row. The limit is enforced by the parent, which kills the child that runs the cell.
+    cell_timeout: u64,
     shapes: Vec<RawShape>,
     batches: Vec<usize>,
     dtypes: Vec<Dtype>,
@@ -239,6 +244,7 @@ fn parse(args: &[String]) -> Result<Args, String> {
         return Ok(Args {
             command,
             threads,
+            cell_timeout: DEFAULT_CELL_TIMEOUT_S,
             shapes: vec![],
             batches: vec![],
             dtypes: vec![],
@@ -259,6 +265,7 @@ fn parse(args: &[String]) -> Result<Args, String> {
     let mut a = Args {
         command,
         threads: None,
+        cell_timeout: DEFAULT_CELL_TIMEOUT_S,
         shapes: vec![],
         batches: vec![1],
         dtypes: vec![Dtype::F64],
@@ -340,6 +347,11 @@ fn parse(args: &[String]) -> Result<Args, String> {
                     "median" => Statistic::Median,
                     _ => return Err("--statistic must be best or median".to_owned()),
                 };
+            }
+            "--cell-timeout" => {
+                a.cell_timeout = value()?
+                    .parse()
+                    .map_err(|_| "--cell-timeout is a number of seconds".to_owned())?;
             }
             "--reps" => a.reps = value()?.parse().map_err(|_| USAGE.to_owned())?,
             "--prime-ms" => a.prime_ms = value()?.parse().map_err(|_| USAGE.to_owned())?,
@@ -523,8 +535,632 @@ fn args_from_env(argv: &[String]) -> Result<Args, String> {
     Ok(args)
 }
 
+/// The per-cell limit when `--cell-timeout` is absent: an hour, which is longer than any cell the
+/// campaign declares and short enough that a hung one cannot hold a run open for a day.
+const DEFAULT_CELL_TIMEOUT_S: u64 = 3600;
+
+/// How long a child that has nothing more to report gets to exit on its own before it is killed, and
+/// the bound on waiting for the kill to land.
+const REAP_GRACE: Duration = Duration::from_millis(250);
+
+/// One build's work order, handed to the child as a single `;`-separated payload. The child builds
+/// and measures; the parent only waits, kills and writes rows.
+struct CellSpec {
+    row: String,
+    family: String,
+    dtype: Dtype,
+    order: Order,
+    case: Case,
+    threads: usize,
+    prime_ms: u64,
+    reps: usize,
+    /// The first variant this child must run: a killed child is replaced by one that resumes at the
+    /// variant after the one it was measured to have cut.
+    from: usize,
+}
+
+impl CellSpec {
+    fn encode(&self) -> String {
+        format!(
+            "row={};family={};dtype={};order={};m={};n={};k={};batch={};threads={};prime_ms={};reps={};from={}",
+            self.row,
+            self.family,
+            self.dtype.label(),
+            self.order.label(),
+            self.case.m,
+            self.case.n,
+            self.case.k.map(|k| k.to_string()).unwrap_or_default(),
+            self.case.batch,
+            self.threads,
+            self.prime_ms,
+            self.reps,
+            self.from
+        )
+    }
+
+    fn decode(text: &str) -> Result<Self, String> {
+        let field = |name: &str| -> Result<String, String> {
+            text.split(';')
+                .find_map(|pair| pair.strip_prefix(&format!("{name}=")))
+                .map(str::to_owned)
+                .ok_or_else(|| format!("--cell-spec has no {name}="))
+        };
+        let number = |name: &str| -> Result<usize, String> {
+            field(name)?
+                .parse()
+                .map_err(|e| format!("--cell-spec {name}=: {e}"))
+        };
+        Ok(CellSpec {
+            row: field("row")?,
+            family: field("family")?,
+            dtype: match field("dtype")?.as_str() {
+                "f64" => Dtype::F64,
+                "c64" => Dtype::C64,
+                "f32" => Dtype::F32,
+                "c32" => Dtype::C32,
+                other => return Err(format!("--cell-spec dtype={other} is not a dtype")),
+            },
+            order: match field("order")?.as_str() {
+                "c" => Order::C,
+                "f" => Order::F,
+                other => return Err(format!("--cell-spec order={other} is not an order")),
+            },
+            case: Case {
+                m: number("m")?,
+                n: number("n")?,
+                k: match field("k")?.as_str() {
+                    "" => None,
+                    digits => Some(digits.parse().map_err(|e| format!("--cell-spec k=: {e}"))?),
+                },
+                batch: number("batch")?,
+            },
+            threads: number("threads")?,
+            prime_ms: number("prime_ms")? as u64,
+            reps: number("reps")?,
+            from: number("from")?,
+        })
+    }
+}
+
+/// The hidden child side of `run`: one build, one `COUNT` line, then one `RESULT` per variant.
+///
+/// The child does not enforce the cell's limit -- it cannot interrupt a library call. It reports what
+/// it measured and the parent kills it at the deadline, which is what makes the limit hold even when
+/// a call never returns.
+fn child_main(spec_text: &str) -> ExitCode {
+    let spec = match CellSpec::decode(spec_text) {
+        Ok(spec) => spec,
+        Err(e) => {
+            eprintln!("{e}");
+            return ExitCode::from(2);
+        }
+    };
+    // The child does the measuring, so it has to be the configuration the parent asked for: the
+    // Rayon pool, the vendor's own thread count (which also turns off LAPACKE's NaN check) and the
+    // faer rows' global parallelism. Without this the build ran on this process's defaults and the
+    // row still said `threads=<n>`: the same cell measured on a different machine configuration.
+    // A child that cannot set it up must not measure at all -- a non-zero exit makes the parent
+    // write a failed row, not a `skipped` one.
+    if let Err(e) = configure_threads(spec.threads) {
+        eprintln!("{e}");
+        return ExitCode::from(2);
+    }
+    // Say what it actually built, so a log (and the thread test) can check it.
+    eprintln!(
+        "CELL child threads={} rayon={} vendor={:?}",
+        spec.threads,
+        rayon::current_num_threads(),
+        vendor::reported_threads()
+    );
+    let ops = match ops_for(&spec.row, spec.dtype, &spec.family, spec.case, spec.order) {
+        Ok(ops) => ops,
+        Err(note) => {
+            // A family this provider cannot take is a skip, not a wrong answer.
+            println!("SKIP\t{note}");
+            return ExitCode::SUCCESS;
+        }
+    };
+    // The parent needs the variant count to know which `RESULT` is the last one, and therefore which
+    // row to hold until the child's exit is known.
+    println!("COUNT\t{}", ops.len());
+    let _ = std::io::stdout().flush();
+    for (index, mut op) in ops.into_iter().enumerate() {
+        if index < spec.from {
+            continue;
+        }
+        let line = match measure_row(&spec.row, spec.threads, &mut op, spec.prime_ms, spec.reps) {
+            Ok(samples) => format!(
+                "RESULT\t{index}\tok\t{}\t{}",
+                op.note,
+                samples
+                    .iter()
+                    .map(|v| v.to_string())
+                    .collect::<Vec<_>>()
+                    .join(",")
+            ),
+            Err(e) => format!("RESULT\t{index}\tfailed\t{}; {e}\t", op.note),
+        };
+        println!("{line}");
+        let _ = std::io::stdout().flush();
+    }
+    ExitCode::SUCCESS
+}
+
+/// How many fields a `RESULT` line has: `RESULT<TAB>index<TAB>status<TAB>note<TAB>samples`.
+const RESULT_FIELDS: usize = 5;
+
+/// One variant as the child reported it.
+struct CellResult {
+    status: &'static str,
+    note: String,
+    samples: Vec<f64>,
+}
+
+/// A `RESULT` line, checked. The child is the only writer of these, so a line that does not have the
+/// shape below is broken output: it must never become an `ok` row, whatever it says.
+fn parse_result(fields: &[&str], expected: usize, reps: usize) -> Result<CellResult, String> {
+    if fields.len() != RESULT_FIELDS {
+        return Err(format!(
+            "RESULT has {} field(s), expected {RESULT_FIELDS}",
+            fields.len()
+        ));
+    }
+    let index: usize = fields[1]
+        .parse()
+        .map_err(|e| format!("RESULT index {:?}: {e}", fields[1]))?;
+    if index != expected {
+        return Err(format!(
+            "the cell child reported variant {} when variant {} was running",
+            index + 1,
+            expected + 1
+        ));
+    }
+    let status = match fields[2] {
+        "ok" => "ok",
+        "timeout" => "timeout",
+        "failed" => "failed",
+        other => return Err(format!("RESULT has an unknown status {other:?}")),
+    };
+    let mut samples = Vec::new();
+    if status == "ok" {
+        if fields[4].is_empty() {
+            return Err("RESULT ok without samples".to_owned());
+        }
+        for sample in fields[4].split(',') {
+            let value: f64 = sample
+                .parse()
+                .map_err(|e| format!("RESULT sample {sample:?}: {e}"))?;
+            if !value.is_finite() || value < 0.0 {
+                return Err(format!(
+                    "RESULT sample is not a finite non-negative number: {sample}"
+                ));
+            }
+            samples.push(value);
+        }
+        if samples.len() != reps {
+            return Err(format!(
+                "RESULT ok with {} sample(s), expected {reps}",
+                samples.len()
+            ));
+        }
+    }
+    Ok(CellResult {
+        status,
+        note: fields[3].to_owned(),
+        samples,
+    })
+}
+
+enum Wake {
+    Line(String),
+    Timeout,
+    Closed,
+}
+
+/// Wait for one line of a child's stdout, for at most `deadline`. The timeout is checked before
+/// receiving, because `recv_timeout` returns an already-queued message before its own deadline.
+fn wait_line(rx: &std::sync::mpsc::Receiver<String>, deadline: Option<Instant>) -> Wake {
+    use std::sync::mpsc::RecvTimeoutError;
+    if let Some(deadline) = deadline {
+        if Instant::now() >= deadline {
+            return Wake::Timeout;
+        }
+        let remaining = deadline.saturating_duration_since(Instant::now());
+        return match rx.recv_timeout(remaining) {
+            Ok(line) => Wake::Line(line),
+            Err(RecvTimeoutError::Timeout) => Wake::Timeout,
+            Err(RecvTimeoutError::Disconnected) => Wake::Closed,
+        };
+    }
+    match rx.recv() {
+        Ok(line) => Wake::Line(line),
+        Err(_) => Wake::Closed,
+    }
+}
+
+/// Reap a child and report whether it ended on its own terms: `None` when it exited successfully
+/// without help, `Some(reason)` when it exited non-zero or had to be killed. There is no blocking
+/// `wait()`: a process that cannot be killed must not hold the run open.
+fn reap(mut child: std::process::Child) -> Option<String> {
+    let until = Instant::now() + REAP_GRACE;
+    loop {
+        match child.try_wait() {
+            Ok(Some(status)) => {
+                return (!status.success()).then(|| format!("the cell child exited with {status}"))
+            }
+            Ok(None) => {}
+            Err(e) => return Some(format!("cannot wait for the cell child: {e}")),
+        }
+        if Instant::now() >= until {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let killed = child.kill().is_ok();
+    let _ = child.wait();
+    Some(if killed {
+        "the cell child was still running when its limit passed and was killed".to_owned()
+    } else {
+        "the cell child did not exit and could not be killed".to_owned()
+    })
+}
+
+struct CellChild {
+    child: std::process::Child,
+    rx: std::sync::mpsc::Receiver<String>,
+    reader: std::thread::JoinHandle<()>,
+}
+
+fn spawn_cell(exe: &std::path::Path, spec: &CellSpec) -> Result<CellChild, String> {
+    use std::process::{Command, Stdio};
+    use std::sync::mpsc;
+    let mut child = Command::new(exe)
+        .arg("--cell-spec")
+        .arg(spec.encode())
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::inherit())
+        .spawn()
+        .map_err(|e| format!("cannot start the cell child: {e}"))?;
+    let stdout = child.stdout.take().expect("piped stdout");
+    let (tx, rx) = mpsc::channel::<String>();
+    let reader = std::thread::spawn(move || {
+        // `lines()` turns one unreadable byte into a silent end of the stream; reading whole lines and
+        // decoding strictly keeps such a byte a line the protocol rejects instead.
+        let mut reader = std::io::BufReader::new(stdout);
+        loop {
+            let mut raw = Vec::new();
+            match std::io::BufRead::read_until(&mut reader, b'\n', &mut raw) {
+                Ok(0) => break,
+                Ok(_) => {}
+                Err(_) => break,
+            }
+            if raw.last() == Some(&b'\n') {
+                raw.pop();
+                if raw.last() == Some(&b'\r') {
+                    raw.pop();
+                }
+            }
+            let line = match String::from_utf8(raw) {
+                Ok(line) => line,
+                Err(e) => format!("<the cell child wrote a line that is not text: {e}>"),
+            };
+            if tx.send(line).is_err() {
+                break;
+            }
+        }
+    });
+    Ok(CellChild { child, rx, reader })
+}
+
+/// Run one build in a child process, one row per variant.
+///
+/// The parent does not build and does not measure. It reads `COUNT` (how many variants the build
+/// produced) and one `RESULT` per variant, holds the last row until the child's exit is known, and
+/// kills the child when the running variant's deadline passes. A cell the harness had to cut, and a
+/// cell whose child died after reporting, are `failed`/`timeout` rows -- never `ok`.
+#[allow(clippy::too_many_arguments)]
+fn run_build_in_child(
+    args: &Args,
+    records: &mut Vec<Record>,
+    all_ok: &mut bool,
+    threads: usize,
+    row: &str,
+    dtype: &Dtype,
+    family: &str,
+    case: Case,
+    order: Order,
+) {
+    let limit = (args.cell_timeout > 0).then(|| Duration::from_secs(args.cell_timeout));
+    let exe = std::env::var_os("FBENCH_CELL_CHILD")
+        .map(std::path::PathBuf::from)
+        .map(Ok)
+        .unwrap_or_else(std::env::current_exe)
+        .unwrap_or_else(|_| std::path::PathBuf::from("fbench"));
+    let spec_at = |from: usize| CellSpec {
+        row: row.to_owned(),
+        family: family.to_owned(),
+        dtype: *dtype,
+        order,
+        case,
+        threads,
+        prime_ms: args.prime_ms,
+        reps: args.reps,
+        from,
+    };
+    // One row per variant, whether it was measured, cut or rejected.
+    let emit_row = |records: &mut Vec<Record>,
+                    all_ok: &mut bool,
+                    index: usize,
+                    status: &'static str,
+                    note: String,
+                    samples: Vec<f64>| {
+        if status != "ok" && status != "skipped" {
+            *all_ok = false;
+        }
+        let _ = index;
+        emit(
+            records,
+            args,
+            threads,
+            dtype,
+            family,
+            case,
+            order,
+            row,
+            (!samples.is_empty()).then_some(samples),
+            status,
+            note,
+        );
+    };
+
+    let mut from = 0usize;
+    let mut variants: Option<usize> = None;
+    loop {
+        let handle = match spawn_cell(&exe, &spec_at(from)) {
+            Ok(handle) => handle,
+            Err(e) => {
+                // The started variant still gets a terminal row: a missing row is worse than a failed
+                // one, because nothing then says the cell did not run.
+                emit_row(records, all_ok, from, "failed", e, Vec::new());
+                return;
+            }
+        };
+        let mut expected = from;
+        // The last reported variant is held until the child's exit is known: a child that reports a
+        // result and then dies must not leave an `ok` row behind.
+        let mut held: Option<CellResult> = None;
+        let mut deadline = limit.map(|limit| Instant::now() + limit);
+        let cut;
+
+        loop {
+            let wake = wait_line(&handle.rx, deadline);
+            match wake {
+                Wake::Line(line) => {
+                    let fields: Vec<&str> = line.split('\t').collect();
+                    match fields.first().copied() {
+                        Some("COUNT") => {
+                            if let Some(n) = fields.get(1).and_then(|n| n.parse().ok()) {
+                                variants = Some(n);
+                            }
+                        }
+                        Some("SKIP") => {
+                            let note = fields.get(1).unwrap_or(&"").to_string();
+                            let verdict = reap(handle.child);
+                            drop(handle.reader);
+                            let (status, note) = match verdict {
+                                None => ("skipped", note),
+                                Some(reason) => (
+                                    "failed",
+                                    format!(
+                                        "the cell child reported a skip and then {reason}: {note}"
+                                    ),
+                                ),
+                            };
+                            emit_row(records, all_ok, from, status, note, Vec::new());
+                            return;
+                        }
+                        Some("RESULT") => match parse_result(&fields, expected, args.reps) {
+                            Ok(result) => {
+                                if let Some(previous) = held.take() {
+                                    let samples = previous.samples.clone();
+                                    emit_row(
+                                        records,
+                                        all_ok,
+                                        expected - 1,
+                                        previous.status,
+                                        previous.note,
+                                        samples,
+                                    );
+                                }
+                                held = Some(result);
+                                expected += 1;
+                                deadline = limit.map(|limit| Instant::now() + limit);
+                            }
+                            Err(e) => {
+                                let verdict = reap(handle.child);
+                                drop(handle.reader);
+                                if let Some(previous) = held.take() {
+                                    let samples = previous.samples.clone();
+                                    emit_row(
+                                        records,
+                                        all_ok,
+                                        expected - 1,
+                                        previous.status,
+                                        previous.note,
+                                        samples,
+                                    );
+                                }
+                                emit_row(
+                                    records,
+                                    all_ok,
+                                    expected,
+                                    "failed",
+                                    match verdict {
+                                        Some(reason) => format!("{e} ({reason})"),
+                                        None => e,
+                                    },
+                                    Vec::new(),
+                                );
+                                return;
+                            }
+                        },
+                        other => {
+                            // A line the protocol does not define is broken output, whatever it says
+                            // and wherever it appears.
+                            let verdict = reap(handle.child);
+                            drop(handle.reader);
+                            if let Some(previous) = held.take() {
+                                let samples = previous.samples.clone();
+                                emit_row(
+                                    records,
+                                    all_ok,
+                                    expected - 1,
+                                    previous.status,
+                                    previous.note,
+                                    samples,
+                                );
+                            }
+                            emit_row(
+                                records,
+                                all_ok,
+                                expected,
+                                "failed",
+                                format!(
+                                    "the cell child wrote a line that is not part of the protocol: {:?}",
+                                    other.unwrap_or(&line)
+                                ),
+                                Vec::new(),
+                            );
+                            let _ = verdict;
+                            return;
+                        }
+                    }
+                }
+                Wake::Timeout => {
+                    let verdict = reap(handle.child);
+                    drop(handle.reader);
+                    match (variants, held.take()) {
+                        // The result that was held is the last variant's: the child hung after
+                        // reporting it, so it is settled by the kill, not recorded as a measurement.
+                        (Some(n), Some(_previous)) if expected >= n => {
+                            emit_row(
+                                records,
+                                all_ok,
+                                n - 1,
+                                "failed",
+                                format!(
+                                    "the final cell did not complete: {}",
+                                    verdict
+                                        .unwrap_or_else(|| "the cell child was cut off".to_owned())
+                                ),
+                                Vec::new(),
+                            );
+                            return;
+                        }
+                        // The deadline passed while a later variant was running: the held row measured
+                        // what it measured, and this variant is the cut one.
+                        (Some(n), previous) if expected < n => {
+                            if let Some(previous) = previous {
+                                let samples = previous.samples.clone();
+                                emit_row(
+                                    records,
+                                    all_ok,
+                                    expected - 1,
+                                    previous.status,
+                                    previous.note,
+                                    samples,
+                                );
+                            }
+                            emit_row(
+                                records,
+                                all_ok,
+                                expected,
+                                "timeout",
+                                format!("timeout {}", args.cell_timeout),
+                                Vec::new(),
+                            );
+                            cut = true;
+                            from = expected + 1;
+                        }
+                        // The child died before it said how many variants the build has: nothing more
+                        // is known, so the variant that was started is the cut one.
+                        _ => {
+                            emit_row(
+                                records,
+                                all_ok,
+                                from,
+                                "timeout",
+                                format!("timeout {}", args.cell_timeout),
+                                Vec::new(),
+                            );
+                            return;
+                        }
+                    }
+                    if cut {
+                        break;
+                    }
+                    return;
+                }
+                Wake::Closed => {
+                    let verdict = reap(handle.child);
+                    drop(handle.reader);
+                    match held.take() {
+                        // The held row is the last variant's, and the child's exit is now known.
+                        Some(previous) => {
+                            let (status, note) = match verdict {
+                                None => (previous.status, previous.note),
+                                Some(reason) => (
+                                    "failed",
+                                    format!("the final cell did not complete: {reason}"),
+                                ),
+                            };
+                            let samples = previous.samples.clone();
+                            emit_row(
+                                records,
+                                all_ok,
+                                expected - 1,
+                                status,
+                                note,
+                                if status == "ok" { samples } else { Vec::new() },
+                            );
+                        }
+                        // Nothing was reported: the child died before its first result.
+                        None => emit_row(
+                            records,
+                            all_ok,
+                            expected,
+                            "failed",
+                            format!(
+                                "the cell child stopped before reporting a result: {}",
+                                verdict.unwrap_or_else(|| "it exited successfully".to_owned())
+                            ),
+                            Vec::new(),
+                        ),
+                    }
+                    return;
+                }
+            }
+        }
+        if !cut {
+            return;
+        }
+    }
+}
+
 fn main() -> ExitCode {
     let argv: Vec<String> = std::env::args().collect();
+    // Hidden child mode: one build, measured in its own process so the parent can kill it at the
+    // cell's deadline. It is not part of the recorder's CLI.
+    if argv.get(1).map(String::as_str) == Some("--cell-spec") {
+        return match argv.get(2) {
+            Some(spec) => child_main(spec),
+            None => {
+                eprintln!("--cell-spec needs a payload");
+                ExitCode::from(2)
+            }
+        };
+    }
     let args = match args_from_env(&argv) {
         Ok(a) => a,
         Err(e) => {
@@ -599,6 +1235,22 @@ fn main() -> ExitCode {
                                 eprintln!("{e}");
                                 return ExitCode::from(2);
                             }
+                            if run {
+                                // One build in its own process: the parent writes the rows and
+                                // enforces the cell's limit by killing it.
+                                run_build_in_child(
+                                    &args,
+                                    &mut records,
+                                    &mut all_ok,
+                                    threads,
+                                    row,
+                                    dtype,
+                                    family,
+                                    case,
+                                    order,
+                                );
+                                continue;
+                            }
                             let ops = match ops_for(row, *dtype, family, case, order) {
                                 Ok(ops) => ops,
                                 Err(note) => {
@@ -628,93 +1280,55 @@ fn main() -> ExitCode {
                                 }
                             };
                             for mut ops in ops {
-                                if run {
-                                    match measure_row(row, threads, &mut ops, args.prime_ms, args.reps) {
-                                        Ok(samples) => {
-                                            let note = ops.note.clone();
-                                            emit(
-                                                &mut records,
-                                                &args,
-                                                threads,
-                                                dtype,
-                                                family,
-                                                case,
-                                                order,
-                                                row,
-                                                Some(samples),
-                                                "ok",
-                                                note,
-                                            );
-                                        }
-                                        Err(e) => {
-                                            let e = format!("{}; {e}", ops.note);
-                                            all_ok = false;
-                                            emit(
-                                                &mut records,
-                                                &args,
-                                                threads,
-                                                dtype,
-                                                family,
-                                                case,
-                                                order,
-                                                row,
-                                                None,
-                                                "failed",
-                                                e,
-                                            );
-                                        }
+                                let label = format!(
+                                    "{row} {} {} {} {}",
+                                    family,
+                                    dtype.label(),
+                                    order.label(),
+                                    case.shape()
+                                );
+                                let outcome = ops
+                                    .prepare()
+                                    .and_then(|()| {
+                                        // the verification pass runs each op once, outside any
+                                        // budget: a sequential token
+                                        ops.run(op::Token::none())
+                                    })
+                                    .and_then(|()| ops.check());
+                                match outcome {
+                                    Ok(()) => {
+                                        println!("ok {label} {}", ops.note);
+                                        emit(
+                                            &mut records,
+                                            &args,
+                                            threads,
+                                            dtype,
+                                            family,
+                                            case,
+                                            order,
+                                            row,
+                                            None,
+                                            "ok",
+                                            ops.note.clone(),
+                                        );
                                     }
-                                } else {
-                                    let label = format!(
-                                        "{row} {} {} {} {}",
-                                        family,
-                                        dtype.label(),
-                                        order.label(),
-                                        case.shape()
-                                    );
-                                    let outcome = ops
-                                        .prepare()
-                                        .and_then(|()| {
-                                            // the verification pass runs each op once, outside any
-                                            // budget: a sequential token
-                                            ops.run(op::Token::none())
-                                        })
-                                        .and_then(|()| ops.check());
-                                    match outcome {
-                                        Ok(()) => {
-                                            println!("ok {label} {}", ops.note);
-                                            emit(
-                                                &mut records,
-                                                &args,
-                                                threads,
-                                                dtype,
-                                                family,
-                                                case,
-                                                order,
-                                                row,
-                                                None,
-                                                "ok",
-                                                ops.note.clone(),
-                                            );
-                                        }
-                                        Err(e) => {
-                                            let e = format!("{}; {e}", ops.note);
-                                            println!("MISMATCH {label} {e}");
-                                            all_ok = false;
-                                            emit(
-                                                &mut records,
-                                                &args,
-                                                threads,
-                                                dtype,
-                                                family,
-                                                case,
-                                                order,
-                                                row,
-                                                None,
-                                                "failed",
-                                                e,
-                                            );
-                                        }
+                                    Err(e) => {
+                                        let e = format!("{}; {e}", ops.note);
+                                        println!("MISMATCH {label} {e}");
+                                        all_ok = false;
+                                        emit(
+                                            &mut records,
+                                            &args,
+                                            threads,
+                                            dtype,
+                                            family,
+                                            case,
+                                            order,
+                                            row,
+                                            None,
+                                            "failed",
+                                            e,
+                                        );
                                     }
                                 }
                             }
